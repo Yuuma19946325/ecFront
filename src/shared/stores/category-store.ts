@@ -6,8 +6,6 @@ import { useErrorResponseStore, type ErrorResponse } from './error-response-stor
 // カテゴリーサービスをインスタンス化
 const categoryService = new CategoryService()
 
-const errorResponseStore = useErrorResponseStore()
-
 export interface Category {
   categoryId?: number
   categoryName: String
@@ -46,6 +44,8 @@ export const useCategoryStore = defineStore('category-store', {
         })
     },
     add(category: Category): void {
+      const errorResponseStore = useErrorResponseStore()
+
       categoryService
         .postCategory(category)
         .pipe(
@@ -61,10 +61,66 @@ export const useCategoryStore = defineStore('category-store', {
         )
         .subscribe({
           next: (response: ErrorResponse) => {
+            if (!response.result) this.increment()
+
             errorResponseStore.setError(response)
           },
-          error: (err) => {
-            console.error('Error:', err)
+          error: (error: ErrorResponse) => {
+            errorResponseStore.setError(error)
+          }
+        })
+    },
+    update(categoryId: number, category: Category): void {
+      const errorResponseStore = useErrorResponseStore()
+
+      categoryService
+        .putCategory(categoryId, category)
+        .pipe(
+          map((response) => response as ErrorResponse),
+          catchError((error): never => {
+            const errorResponse: ErrorResponse = {
+              result: error.result || true,
+              status: error.status || 500,
+              message: error.message || 'Unknown error'
+            }
+            throw errorResponse
+          })
+        )
+        .subscribe({
+          next: (response: ErrorResponse) => {
+            if (!response.result) this.increment()
+
+            errorResponseStore.setError(response)
+          },
+          error: (error: ErrorResponse) => {
+            errorResponseStore.setError(error)
+          }
+        })
+    },
+    delete(categoryId: number): void {
+      const errorResponseStore = useErrorResponseStore()
+
+      categoryService
+        .deleteCategory(categoryId)
+        .pipe(
+          map((response) => response as ErrorResponse),
+          catchError((error): never => {
+            const errorResponse: ErrorResponse = {
+              result: error.result || true,
+              status: error.status || 500,
+              message: error.message || 'Unknown error'
+            }
+            throw errorResponse
+          })
+        )
+        .subscribe({
+          next: (response: ErrorResponse) => {
+            if (!response.result) this.increment()
+
+            errorResponseStore.setError(response)
+          },
+          error: (error: ErrorResponse) => {
+            errorResponseStore.setError(error)
           }
         })
     }

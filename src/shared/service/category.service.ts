@@ -16,8 +16,8 @@ export class CategoryService extends HttpClientService {
   }
 
   // カテゴリ更新
-  putCategory(category: Category): Observable<ErrorResponse> {
-    return this.put(URLS['category'] + `/${category.categoryId}`, category)
+  putCategory(categoryId: number, category: Category): Observable<ErrorResponse> {
+    return this.put(URLS['category'] + `/${categoryId}`, category)
   }
 
   // カテゴリ停止

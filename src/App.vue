@@ -5,10 +5,12 @@ import { useGoodsStore, type Goods } from './shared/stores/goods-store'
 import Header from './pages/components/Header.vue'
 import Footer from './pages/components/Footer.vue'
 import { useCategoryStore, type Category } from './shared/stores/category-store'
+import { useErrorResponseStore } from './shared/stores/error-response-store'
 
 const counterStore = useCounterStore()
 const goodsStore = useGoodsStore()
 const categoryStore = useCategoryStore()
+const errorResponseStore = useErrorResponseStore()
 
 // 画面起動時に実行される処理
 onMounted(() => {
@@ -34,8 +36,14 @@ const bbb = computed((): Category[] => {
   return categoryStore.getCategoryList
 })
 
-const onIncrementClick2 = (category: Category) => {
+const add = (category: Category) => {
   categoryStore.add(category)
+}
+const update = (categoryId: number, category: Category) => {
+  categoryStore.update(categoryId, category)
+}
+const delete1 = (categoryId: number) => {
+  categoryStore.delete(categoryId)
 }
 </script>
 
@@ -49,8 +57,11 @@ const onIncrementClick2 = (category: Category) => {
     <p>テスト: {{ aaa }}</p>
     <p>テスト: {{ categoryStore.getCategoryList }}</p>
     <p>テスト: {{ categoryStore.$state.categoryList }}</p>
+    <p>エラーレスポンス: {{ errorResponseStore.$state.errorResponse }}</p>
     <p>count: {{ count }}</p>
-    <button v-on:click="onIncrementClick2({ categoryName: 'テスト' })">加算</button>
+    <button v-on:click="add({ categoryName: 'テスト' })">追加</button>
+    <button v-on:click="update(33, { categoryName: 'テスト2' })">編集</button>
+    <button v-on:click="delete1(33)">削除</button>
   </main>
   <Footer />
 </template>
