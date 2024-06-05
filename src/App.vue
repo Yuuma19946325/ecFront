@@ -1,63 +1,48 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { RouterLink, RouterView } from 'vue-router'
-import { useCounterStore } from "./shared/stores/counter";
-import { useGoodsStore } from "./shared/stores/goods";
-import { Subject } from 'rxjs';
-import { from } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import axios from 'axios';
+import { computed, onMounted } from 'vue'
+import { useCounterStore } from './shared/stores/counter'
+import { useGoodsStore, type Goods } from './shared/stores/goods-store'
+import Header from './pages/components/Header.vue'
+import Footer from './pages/components/Footer.vue'
 
-const counterStore = useCounterStore();
-const goodsStore = useGoodsStore();
+const counterStore = useCounterStore()
+const goodsStore = useGoodsStore()
 
-const count = computed(
-  (): number => {
-    return counterStore.count;
-  }
-);
+// 画面起動時に実行される処理
+onMounted(() => {
+  // 商品情報を取得
+  goodsStore.increment()
+})
 
-const doubleCount = computed(
-  (): number => {
-    return counterStore.doubleCount;
-  }
-);
+const count = computed((): number => {
+  return counterStore.count
+})
 
-const onIncrementClick = () => {
-  counterStore.increment();
-};
+const doubleCount = computed((): number => {
+  return counterStore.doubleCount
+})
+
+const aaa = computed((): Goods[] => {
+  return goodsStore.goodsList
+})
 
 const onIncrementClick2 = () => {
-  goodsStore.increment();
-};
-
-const fetchData = () => {
-      const apiObservable = from(axios.get('http://localhost:8080/api/goods/list')).pipe(
-        map(response => response.data),
-        catchError(err => {
-          return [];
-        })
-      );
-
-      apiObservable.subscribe({
-        next: result => {
-          console.log(result)
-        },
-        error: err => {
-          console.log(err)
-        }
-      });
-    }
+  goodsStore.increment()
+}
 </script>
 
 <template>
-  <header>
-  </header>
-  <p>count: {{ count }}</p>
-  <p>doubleCount: {{ doubleCount }}</p>
-  <button v-on:click="onIncrementClick2">加算</button>
+  <Header />
+  <main>
+    <RouterView />
+    <p>count: {{ count }}</p>
+    <p>doubleCount: {{ doubleCount }}</p>
+    <p>doubleCount: {{ doubleCount }}</p>
+    <p>テスト: {{ aaa }}</p>
+    <p>count: {{ count }}</p>
+    <button v-on:click="onIncrementClick2">加算</button>
+  </main>
+  <Footer />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
