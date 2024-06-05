@@ -1,9 +1,7 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { ajax } from 'rxjs/ajax'
-import { catchError, map } from 'rxjs/operators'
-import { BASE_URL } from '../api/endpoints'
+import { catchError } from 'rxjs/operators'
 import { GoodsService } from '@/shared/service/goods.service'
+import { of } from 'rxjs'
 
 // 商品サービスをインスタンス化
 const goodsService = new GoodsService()
@@ -21,6 +19,9 @@ export interface Goods {
   target: number
   point: number
   image: any
+  updateDate: Date
+  deleteDate: Date
+  deleteFlag: boolean
 }
 
 export const useGoodsStore = defineStore('goods-store', {
@@ -39,11 +40,16 @@ export const useGoodsStore = defineStore('goods-store', {
         .pipe(
           catchError((err) => {
             console.error(err)
-            return err
+            return of([])
           })
         )
-        .subscribe((response) => {
-          this.goods = response as Goods[]
+        .subscribe({
+          next: (response) => {
+            this.goods = response as Goods[]
+          },
+          error: (err) => {
+            console.error('Error:', err)
+          }
         })
     }
   }
