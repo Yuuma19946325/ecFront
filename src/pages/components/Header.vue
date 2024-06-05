@@ -31,7 +31,7 @@ const menuItems = [
     id: 4,
     label: '管理者',
     onClick: () => {
-      /* Add your click logic here */
+      router.push({ path: '/managerMenu' })
     }
   }
 ]

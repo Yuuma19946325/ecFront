@@ -26,11 +26,11 @@ export interface Goods {
 
 export const useGoodsStore = defineStore('goods-store', {
   state: () => ({
-    goods: [] as Goods[]
+    goodsList: [] as Goods[]
   }),
   getters: {
-    goodsList(state): Goods[] {
-      return state.goods
+    getGoodsList(state): Goods[] {
+      return state.goodsList
     }
   },
   actions: {
@@ -45,7 +45,7 @@ export const useGoodsStore = defineStore('goods-store', {
         )
         .subscribe({
           next: (response) => {
-            this.goods = response as Goods[]
+            this.goodsList = response as Goods[]
           },
           error: (err) => {
             console.error('Error:', err)

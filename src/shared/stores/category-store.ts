@@ -1,16 +1,19 @@
 import { defineStore } from 'pinia'
 import { CategoryService } from '../service/category.service'
-import { catchError, of } from 'rxjs'
+import { catchError, map, of } from 'rxjs'
+import { useErrorResponseStore, type ErrorResponse } from './error-response-store'
 
 // カテゴリーサービスをインスタンス化
 const categoryService = new CategoryService()
 
+const errorResponseStore = useErrorResponseStore()
+
 export interface Category {
-  categoryId: number
+  categoryId?: number
   categoryName: String
-  updateDate: Date
-  deleteDate: Date | null
-  deleteFlag: boolean
+  updateDate?: Date
+  deleteDate?: Date | null
+  deleteFlag?: boolean
 }
 
 export const useCategoryStore = defineStore('category-store', {
@@ -18,7 +21,7 @@ export const useCategoryStore = defineStore('category-store', {
     categoryList: new Array() as Category[]
   }),
   getters: {
-    categoryList(state): Category[] {
+    getCategoryList(state): Category[] {
       return state.categoryList
     }
   },
@@ -33,15 +36,37 @@ export const useCategoryStore = defineStore('category-store', {
             return of([])
           })
         )
-        .subscribe(
-          (response) => {
-            // categoryListを直接置き換えるのではなく、spliceを使用して更新
-            this.categoryList.splice(0, this.categoryList.length, ...(response as Category[]))
+        .subscribe({
+          next: (response) => {
+            this.categoryList = response as Category[]
           },
-          (err) => {
+          error: (err) => {
             console.error('Error:', err)
           }
+        })
+    },
+    add(category: Category): void {
+      categoryService
+        .postCategory(category)
+        .pipe(
+          map((response) => response as ErrorResponse),
+          catchError((error): never => {
+            const errorResponse: ErrorResponse = {
+              result: error.result || true,
+              status: error.status || 500,
+              message: error.message || 'Unknown error'
+            }
+            throw errorResponse
+          })
         )
+        .subscribe({
+          next: (response: ErrorResponse) => {
+            errorResponseStore.setError(response)
+          },
+          error: (err) => {
+            console.error('Error:', err)
+          }
+        })
     }
   }
 })
