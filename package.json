@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@quasar/cli": "^2.4.1",
     "@vueuse/rxjs": "^10.10.0",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
