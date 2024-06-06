@@ -48,22 +48,24 @@ const delete1 = (categoryId: number) => {
 </script>
 
 <template>
-  <Header />
-  <main>
-    <RouterView />
-    <p>count: {{ count }}</p>
-    <p>doubleCount: {{ doubleCount }}</p>
-    <p>doubleCount: {{ doubleCount }}</p>
-    <p>テスト: {{ aaa }}</p>
-    <p>テスト: {{ categoryStore.getCategoryList }}</p>
-    <p>テスト: {{ categoryStore.$state.categoryList }}</p>
-    <p>エラーレスポンス: {{ errorResponseStore.$state.errorResponse }}</p>
-    <p>count: {{ count }}</p>
-    <button v-on:click="add({ categoryName: 'テスト' })">追加</button>
-    <button v-on:click="update(33, { categoryName: 'テスト2' })">編集</button>
-    <button v-on:click="delete1(33)">削除</button>
-  </main>
-  <Footer />
+  <q-layout view="lHh Lpr lFf">
+    <Header />
+    <q-page-container>
+      <RouterView />
+      <p>count: {{ count }}</p>
+      <p>doubleCount: {{ doubleCount }}</p>
+      <p>doubleCount: {{ doubleCount }}</p>
+      <p>テスト: {{ aaa }}</p>
+      <p>テスト: {{ categoryStore.getCategoryList }}</p>
+      <p>テスト: {{ categoryStore.$state.categoryList }}</p>
+      <p>エラーレスポンス: {{ errorResponseStore.$state.errorResponse }}</p>
+      <p>count: {{ count }}</p>
+      <button v-on:click="add({ categoryName: 'テスト' })">追加</button>
+      <button v-on:click="update(33, { categoryName: 'テスト2' })">編集</button>
+      <button v-on:click="delete1(33)">削除</button>
+    </q-page-container>
+    <Footer />
+  </q-layout>
 </template>
 
 <style scoped></style>

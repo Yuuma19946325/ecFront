@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const title = 'My Website'
+const title = ref<String>('My Website')
 const menuItems = [
   {
     id: 1,
@@ -37,14 +37,16 @@ const menuItems = [
 ]
 </script>
 <template>
-  <header>
-    <h1>{{ title }}</h1>
-    <nav>
+  <q-header>
+    <q-toolbar>
+      <q-toolbar-title>
+        {{ title }}
+      </q-toolbar-title>
       <ul>
         <li v-for="item in menuItems" :key="item.id" v-on:click="item.onClick">{{ item.label }}</li>
       </ul>
-    </nav>
-  </header>
+    </q-toolbar>
+  </q-header>
 </template>
 
 <style scoped>

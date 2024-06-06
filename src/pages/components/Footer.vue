@@ -3,13 +3,13 @@ const name = 'Footer'
 </script>
 
 <template>
-  <footer>
+  <q-footer>
     <div class="container">
       <div class="footer-content">
         <!-- Footer content goes here -->
       </div>
     </div>
-  </footer>
+  </q-footer>
 </template>
 
 <style scoped>

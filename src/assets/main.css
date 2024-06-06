@@ -19,7 +19,7 @@ body {
   box-sizing: border-box;
 }
 
-main {
+.q-page-container {
   width: 100%;
   flex: 1;
   padding: 10px;
