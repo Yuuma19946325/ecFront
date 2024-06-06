@@ -11,7 +11,7 @@ export class CategoryService extends HttpClientService {
   }
 
   // カテゴリ取得
-  getCategoryList(): Observable<Category> {
+  getCategoryList(): Observable<Category[]> {
     return this.get(URLS['category'] + '/list')
   }
 

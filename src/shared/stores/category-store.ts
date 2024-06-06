@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import { CategoryService } from '../service/category.service'
-import { catchError, of } from 'rxjs'
-import { handleErrors, subscribeWithCommonHandling } from './error-response-store'
+import { catchError, map } from 'rxjs'
+import {
+  handleErrors,
+  subscribeWithCommonHandling,
+  useErrorResponseStore,
+  type ErrorResponse
+} from './error-response-store'
 
 // カテゴリーサービスをインスタンス化
 const categoryService = new CategoryService()
@@ -28,18 +33,22 @@ export const useCategoryStore = defineStore('category-store', {
       categoryService
         .getCategoryList()
         .pipe(
-          catchError((err) => {
-            console.error(err)
-            // エラー発生時には空配列を返す
-            return of([])
+          map((response) => response as Category[]),
+          catchError((error) => {
+            const errorResponse: ErrorResponse = {
+              result: error.result || true,
+              status: error.status || 500,
+              message: error.message || 'Unknown error'
+            }
+            throw errorResponse
           })
         )
         .subscribe({
-          next: (response) => {
+          next: (response: Category[]) => {
             this.categoryList = response as Category[]
           },
-          error: (err) => {
-            console.error('Error:', err)
+          error: (error: ErrorResponse) => {
+            useErrorResponseStore().setError(error)
           }
         })
     },

@@ -5,7 +5,7 @@ import { URLS } from '../api/endpoints'
 
 export class GoodsService extends HttpClientService {
   // 商品一覧取得
-  getGoodsList(): Observable<Goods> {
+  getGoodsList(): Observable<Goods[]> {
     return this.get(URLS['goods'] + '/list')
   }
 }

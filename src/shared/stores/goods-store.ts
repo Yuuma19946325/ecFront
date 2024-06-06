@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { catchError } from 'rxjs/operators'
+import { catchError, map } from 'rxjs/operators'
 import { GoodsService } from '@/shared/service/goods.service'
-import { of } from 'rxjs'
+import { useErrorResponseStore, type ErrorResponse } from './error-response-store'
 
 // 商品サービスをインスタンス化
 const goodsService = new GoodsService()
@@ -38,17 +38,22 @@ export const useGoodsStore = defineStore('goods-store', {
       goodsService
         .getGoodsList()
         .pipe(
-          catchError((err) => {
-            console.error(err)
-            return of([])
+          map((response) => response as Goods[]),
+          catchError((error) => {
+            const errorResponse: ErrorResponse = {
+              result: error.result || true,
+              status: error.status || 500,
+              message: error.message || 'Unknown error'
+            }
+            throw errorResponse
           })
         )
         .subscribe({
-          next: (response) => {
+          next: (response: Goods[]) => {
             this.goodsList = response as Goods[]
           },
-          error: (err) => {
-            console.error('Error:', err)
+          error: (error: ErrorResponse) => {
+            useErrorResponseStore().setError(error)
           }
         })
     }
