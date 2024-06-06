@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { catchError, map, type Observable } from 'rxjs'
 
 export interface ErrorResponse {
   result: boolean
@@ -8,10 +9,10 @@ export interface ErrorResponse {
 
 export const useErrorResponseStore = defineStore('errorResponse-store', {
   state: () => ({
-    errorResponse: new Object() as ErrorResponse
+    errorResponse: null as ErrorResponse | null
   }),
   getters: {
-    getErrorResponse(state): ErrorResponse {
+    getErrorResponse(state): ErrorResponse | null {
       return state.errorResponse
     }
   },
@@ -24,3 +25,32 @@ export const useErrorResponseStore = defineStore('errorResponse-store', {
     }
   }
 })
+
+export function handleErrors(observable: Observable<any>): Observable<any> {
+  return observable.pipe(
+    map((response) => response as ErrorResponse),
+    catchError((error) => {
+      const errorResponse: ErrorResponse = {
+        result: error.result || true,
+        status: error.status || 500,
+        message: error.message || 'Unknown error'
+      }
+      throw errorResponse
+    })
+  )
+}
+
+export function subscribeWithCommonHandling(
+  observable: Observable<any>,
+  incrementCallback: () => void
+): void {
+  observable.subscribe({
+    next: (response: ErrorResponse) => {
+      if (!response.result) incrementCallback()
+      useErrorResponseStore().setError(response)
+    },
+    error: (error: ErrorResponse) => {
+      useErrorResponseStore().setError(error)
+    }
+  })
+}

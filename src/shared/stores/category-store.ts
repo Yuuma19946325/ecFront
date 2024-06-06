@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { CategoryService } from '../service/category.service'
-import { catchError, map, of } from 'rxjs'
-import { useErrorResponseStore, type ErrorResponse } from './error-response-store'
+import { catchError, of } from 'rxjs'
+import { handleErrors, subscribeWithCommonHandling } from './error-response-store'
 
 // カテゴリーサービスをインスタンス化
 const categoryService = new CategoryService()
@@ -44,85 +44,16 @@ export const useCategoryStore = defineStore('category-store', {
         })
     },
     add(category: Category): void {
-      const errorResponseStore = useErrorResponseStore()
-
-      categoryService
-        .postCategory(category)
-        .pipe(
-          map((response) => response as ErrorResponse),
-          catchError((error): never => {
-            const errorResponse: ErrorResponse = {
-              result: error.result || true,
-              status: error.status || 500,
-              message: error.message || 'Unknown error'
-            }
-            throw errorResponse
-          })
-        )
-        .subscribe({
-          next: (response: ErrorResponse) => {
-            if (!response.result) this.increment()
-
-            errorResponseStore.setError(response)
-          },
-          error: (error: ErrorResponse) => {
-            errorResponseStore.setError(error)
-          }
-        })
+      const observable = categoryService.postCategory(category)
+      subscribeWithCommonHandling(handleErrors(observable), this.increment)
     },
     update(categoryId: number, category: Category): void {
-      const errorResponseStore = useErrorResponseStore()
-
-      categoryService
-        .putCategory(categoryId, category)
-        .pipe(
-          map((response) => response as ErrorResponse),
-          catchError((error): never => {
-            const errorResponse: ErrorResponse = {
-              result: error.result || true,
-              status: error.status || 500,
-              message: error.message || 'Unknown error'
-            }
-            throw errorResponse
-          })
-        )
-        .subscribe({
-          next: (response: ErrorResponse) => {
-            if (!response.result) this.increment()
-
-            errorResponseStore.setError(response)
-          },
-          error: (error: ErrorResponse) => {
-            errorResponseStore.setError(error)
-          }
-        })
+      const observable = categoryService.putCategory(categoryId, category)
+      subscribeWithCommonHandling(handleErrors(observable), this.increment)
     },
     delete(categoryId: number): void {
-      const errorResponseStore = useErrorResponseStore()
-
-      categoryService
-        .deleteCategory(categoryId)
-        .pipe(
-          map((response) => response as ErrorResponse),
-          catchError((error): never => {
-            const errorResponse: ErrorResponse = {
-              result: error.result || true,
-              status: error.status || 500,
-              message: error.message || 'Unknown error'
-            }
-            throw errorResponse
-          })
-        )
-        .subscribe({
-          next: (response: ErrorResponse) => {
-            if (!response.result) this.increment()
-
-            errorResponseStore.setError(response)
-          },
-          error: (error: ErrorResponse) => {
-            errorResponseStore.setError(error)
-          }
-        })
+      const observable = categoryService.deleteCategory(categoryId)
+      subscribeWithCommonHandling(handleErrors(observable), this.increment)
     }
   }
 })
