@@ -36,15 +36,18 @@ const menuItems = [
   }
 ]
 </script>
+
 <template>
   <q-header>
     <q-toolbar>
       <q-toolbar-title>
         {{ title }}
       </q-toolbar-title>
-      <ul>
-        <li v-for="item in menuItems" :key="item.id" v-on:click="item.onClick">{{ item.label }}</li>
-      </ul>
+    </q-toolbar>
+    <q-toolbar>
+      <q-breadcrumbs active-color="#333" style="font-size: 16px">
+        <q-breadcrumbs-el v-for="item in menuItems" :key="item.id" :label="item.label" v-on:click="item.onClick" />
+      </q-breadcrumbs>
     </q-toolbar>
   </q-header>
 </template>
@@ -55,21 +58,7 @@ header {
   padding: 20px;
 }
 
-h1 {
+.q-toolbar {
   color: #333;
-}
-
-nav ul {
-  list-style: none;
-  padding: 0;
-}
-
-nav li {
-  display: inline-block;
-  margin-right: 10px;
-}
-
-nav li:last-child {
-  margin-right: 0;
 }
 </style>

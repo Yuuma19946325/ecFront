@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
-import { useCounterStore } from './shared/stores/counter'
-import { useGoodsStore, type Goods } from './shared/stores/goods-store'
+import { onMounted } from 'vue'
+import { useHead } from '@vueuse/head'
+import { useGoodsStore } from './shared/stores/goods-store'
 import Header from './pages/components/Header.vue'
 import Footer from './pages/components/Footer.vue'
-import { useCategoryStore, type Category } from './shared/stores/category-store'
-import { useErrorResponseStore } from './shared/stores/error-response-store'
+import { useCategoryStore } from './shared/stores/category-store'
 
-const counterStore = useCounterStore()
 const goodsStore = useGoodsStore()
 const categoryStore = useCategoryStore()
-const errorResponseStore = useErrorResponseStore()
+
+// lang属性を設定
+useHead({
+  htmlAttrs: {
+    lang: 'ja'
+  }
+})
 
 // 画面起動時に実行される処理
 onMounted(() => {
@@ -19,32 +23,6 @@ onMounted(() => {
   // カテゴリ情報を取得
   categoryStore.increment()
 })
-
-const count = computed((): number => {
-  return counterStore.count
-})
-
-const doubleCount = computed((): number => {
-  return counterStore.doubleCount
-})
-
-const aaa = computed((): Goods[] => {
-  return goodsStore.getGoodsList
-})
-
-const bbb = computed((): Category[] => {
-  return categoryStore.getCategoryList
-})
-
-const add = (category: Category) => {
-  categoryStore.add(category)
-}
-const update = (categoryId: number, category: Category) => {
-  categoryStore.update(categoryId, category)
-}
-const delete1 = (categoryId: number) => {
-  categoryStore.delete(categoryId)
-}
 </script>
 
 <template>
@@ -52,17 +30,6 @@ const delete1 = (categoryId: number) => {
     <Header />
     <q-page-container>
       <RouterView />
-      <p>count: {{ count }}</p>
-      <p>doubleCount: {{ doubleCount }}</p>
-      <p>doubleCount: {{ doubleCount }}</p>
-      <p>テスト: {{ aaa }}</p>
-      <p>テスト: {{ categoryStore.getCategoryList }}</p>
-      <p>テスト: {{ categoryStore.$state.categoryList }}</p>
-      <p>エラーレスポンス: {{ errorResponseStore.$state.errorResponse }}</p>
-      <p>count: {{ count }}</p>
-      <button v-on:click="add({ categoryName: 'テスト' })">追加</button>
-      <button v-on:click="update(33, { categoryName: 'テスト2' })">編集</button>
-      <button v-on:click="delete1(33)">削除</button>
     </q-page-container>
     <Footer />
   </q-layout>

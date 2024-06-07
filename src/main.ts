@@ -12,10 +12,14 @@ import quasarUserOptions from './quasar/quasar-user-options'
 import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'
 
+import { createHead } from '@vueuse/head'
+
 const app = createApp(App)
+const head = createHead()
 
 app.use(createPinia())
 app.use(router)
 app.use(Quasar, quasarUserOptions)
+app.use(head)
 
 app.mount('#app')
