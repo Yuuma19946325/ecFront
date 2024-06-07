@@ -1,22 +1,51 @@
 <script setup lang="ts">
-const name = 'Footer'
 </script>
 
 <template>
-  <q-footer>
-    <div class="container">
-      <div class="footer-content">
-        <!-- Footer content goes here -->
-      </div>
+  <q-footer class="ec-footer">
+    <div class="footer-links">
+      <ul>
+        <li><a href="#">会社概要</a></li>
+        <li><a href="#">利用規約</a></li>
+        <li><a href="#">プライバシーポリシー</a></li>
+        <li><a href="#">お問い合わせ</a></li>
+      </ul>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2024 ECサイト名. All Rights Reserved.</p>
     </div>
   </q-footer>
 </template>
 
 <style scoped>
-/* Footer component styles go here */
-.footer-content {
-  /* Add your desired styles for the footer content */
-  background-color: #f2f2f2;
-  height: 20px;
+.ec-footer {
+  background-color: #343a40; /* フッターの背景色 */
+  color: #fff; /* テキスト色 */
+  padding: 20px;
+  text-align: center;
+}
+
+.footer-links ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.footer-links li {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #fff; /* リンクの色 */
+}
+
+.footer-links a:hover {
+  color: #007bff; /* ホバー時のリンクの色 */
+}
+
+.copyright p {
+  margin: 0;
+  font-size: 14px;
 }
 </style>
