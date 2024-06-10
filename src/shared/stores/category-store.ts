@@ -60,15 +60,15 @@ export const useCategoryStore = defineStore('category-store', {
     },
     add(category: Category): void {
       const observable = categoryService.postCategory(category)
-      subscribeWithCommonHandling(handleErrors(observable), this.increment)
+      subscribeWithCommonHandling(handleErrors(observable))
     },
     update(categoryId: number, category: Category): void {
       const observable = categoryService.putCategory(categoryId, category)
-      subscribeWithCommonHandling(handleErrors(observable), this.increment)
+      subscribeWithCommonHandling(handleErrors(observable))
     },
     delete(categoryId: number): void {
       const observable = categoryService.deleteCategory(categoryId)
-      subscribeWithCommonHandling(handleErrors(observable), this.increment)
+      subscribeWithCommonHandling(handleErrors(observable))
     }
   }
 })

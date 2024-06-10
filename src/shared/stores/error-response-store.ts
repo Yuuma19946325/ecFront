@@ -40,13 +40,24 @@ export function handleErrors(observable: Observable<any>): Observable<any> {
   )
 }
 
-export function subscribeWithCommonHandling(
+export function subscribeWithCommonHandlingIncrementCallback(
   observable: Observable<any>,
   incrementCallback: () => void
 ): void {
   observable.subscribe({
     next: (response: ErrorResponse) => {
       if (!response.result) incrementCallback()
+      useErrorResponseStore().setError(response)
+    },
+    error: (error: ErrorResponse) => {
+      useErrorResponseStore().setError(error)
+    }
+  })
+}
+
+export function subscribeWithCommonHandling(observable: Observable<any>): void {
+  observable.subscribe({
+    next: (response: ErrorResponse) => {
       useErrorResponseStore().setError(response)
     },
     error: (error: ErrorResponse) => {
