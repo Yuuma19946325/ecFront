@@ -5,13 +5,13 @@ import { useCategoryStore, type Category } from '../../shared/stores/category-st
 const categoryStore = useCategoryStore()
 
 // 初期データ
-const operationItems = ref(['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10']);
-const stopItems = ref([]);
+const operationItems = ref<Category[]>(categoryStore.getCategoryOperationList);
+const stopItems = ref<Category[]>(categoryStore.getCategoryStopList);
 
 // 選択されたアイテムのトラッキング
 const selected = ref({
-  operation: null,
-  stop: null
+  operation: null as Category | null,
+  stop: null as Category | null
 });
 
 // アイテム選択ハンドラ
@@ -23,6 +23,7 @@ const selectItem = (item, type) => {
 const moveSelectedToStop = () => {
   if (selected.value.operation !== null) {
     stopItems.value.push(selected.value.operation);
+    categoryStore.delete(selected.value.operation.categoryId)
     operationItems.value = operationItems.value.filter(item => item !== selected.value.operation);
     selected.value.operation = null;
   }
@@ -31,6 +32,7 @@ const moveSelectedToStop = () => {
 const moveSelectedToOperation = () => {
   if (selected.value.stop !== null) {
     operationItems.value.push(selected.value.stop);
+    categoryStore.update(selected.value.stop.categoryId, { categoryId:selected.value.stop.categoryId,categoryName:selected.value.stop.categoryName, deleteFlag:false})
     stopItems.value = stopItems.value.filter(item => item !== selected.value.stop);
     selected.value.stop = null;
   }
@@ -45,11 +47,11 @@ const moveSelectedToOperation = () => {
       <ul class="item-list">
         <li 
           v-for="item in operationItems" 
-          :key="item" 
+          :key="item.categoryId" 
           @click="selectItem(item, 'operation')"
-          :class="{ 'selected-item': selected.operation === item }"
+          :class="{ 'selected-item': selected.operation?.categoryId === item.categoryId }"
         >
-          {{ item }}
+          {{ item.categoryName }}
         </li>
         <li v-if="operationItems.length === 0" class="empty-placeholder">No Items</li>
       </ul>
@@ -63,11 +65,11 @@ const moveSelectedToOperation = () => {
       <ul class="item-list">
         <li 
           v-for="item in stopItems" 
-          :key="item" 
+          :key="item.categoryId" 
           @click="selectItem(item, 'stop')"
-          :class="{ 'selected-item': selected.stop === item }"
+          :class="{ 'selected-item': selected.stop?.categoryId === item.categoryId }"
         >
-          {{ item }}
+          {{ item.categoryName }}
         </li>
         <li v-if="stopItems.length === 0" class="empty-placeholder">No Items</li>
       </ul>
