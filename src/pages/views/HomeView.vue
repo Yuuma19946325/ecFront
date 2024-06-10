@@ -42,11 +42,13 @@ const delete1 = (categoryId: number) => {
     <p>doubleCount: {{ doubleCount }}</p>
     <p>doubleCount: {{ doubleCount }}</p>
     <p>テスト: {{ aaa }}</p>
-    <p>テスト: {{ categoryStore.getCategoryList }}</p>
-    <p>テスト: {{ categoryStore.$state.categoryList }}</p>
+    <p>テスト1: {{ categoryStore.getCategoryList }}</p>
+    <p>テスト2: {{ categoryStore.$state.categoryList }}</p>
+    <p>テスト3: {{ categoryStore.getCategoryOperationList }}</p>
+    <p>テスト4: {{ categoryStore.getCategoryStopList }}</p>
     <p>エラーレスポンス: {{ errorResponseStore.$state.errorResponse }}</p>
     <p>count: {{ count }}</p>
-    <button v-on:click="add({ categoryName: 'テスト' })">追加</button>
-    <button v-on:click="update(33, { categoryName: 'テスト2' })">編集</button>
-    <button v-on:click="delete1(33)">削除</button>
+    <button v-on:click="add({ categoryName: 'テスト2' })">追加</button>
+    <button v-on:click="update(36, { categoryName: 'テスト編集' })">編集</button>
+    <button v-on:click="delete1(36)">削除</button>
 </template>

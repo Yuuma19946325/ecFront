@@ -1,35 +1,38 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
+import { useCategoryStore, type Category } from '../../shared/stores/category-store';
+
+const categoryStore = useCategoryStore()
 
 // 初期データ
-const availableItems = ref(['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10']);
-const selectedItems = ref([]);
+const operationItems = ref(['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10']);
+const stopItems = ref([]);
 
 // 選択されたアイテムのトラッキング
 const selected = ref({
-  available: null,
-  selected: null
+  operation: null,
+  stop: null
 });
 
 // アイテム選択ハンドラ
-function selectItem(item, type) {
+const selectItem = (item, type) => {
   selected.value[type] = item;
 }
 
 // アイテム移動ハンドラ
-function moveSelectedToTarget() {
-  if (selected.value.available !== null) {
-    selectedItems.value.push(selected.value.available);
-    availableItems.value = availableItems.value.filter(item => item !== selected.value.available);
-    selected.value.available = null;
+const moveSelectedToStop = () => {
+  if (selected.value.operation !== null) {
+    stopItems.value.push(selected.value.operation);
+    operationItems.value = operationItems.value.filter(item => item !== selected.value.operation);
+    selected.value.operation = null;
   }
 }
 
-function moveSelectedToSource() {
-  if (selected.value.selected !== null) {
-    availableItems.value.push(selected.value.selected);
-    selectedItems.value = selectedItems.value.filter(item => item !== selected.value.selected);
-    selected.value.selected = null;
+const moveSelectedToOperation = () => {
+  if (selected.value.stop !== null) {
+    operationItems.value.push(selected.value.stop);
+    stopItems.value = stopItems.value.filter(item => item !== selected.value.stop);
+    selected.value.stop = null;
   }
 }
 </script>
@@ -37,35 +40,36 @@ function moveSelectedToSource() {
 <template>
   <div class="picklist">
     <div class="picklist-container">
-      <h3>Available Items</h3>
+      <h5>稼働中
+      </h5>
       <ul class="item-list">
         <li 
-          v-for="item in availableItems" 
+          v-for="item in operationItems" 
           :key="item" 
-          @click="selectItem(item, 'available')"
-          :class="{ 'selected-item': selected.available === item }"
+          @click="selectItem(item, 'operation')"
+          :class="{ 'selected-item': selected.operation === item }"
         >
           {{ item }}
         </li>
-        <li v-if="availableItems.length === 0" class="empty-placeholder">No Items</li>
+        <li v-if="operationItems.length === 0" class="empty-placeholder">No Items</li>
       </ul>
     </div>
     <div class="picklist-actions">
-      <button @click="moveSelectedToTarget">></button>
-      <button @click="moveSelectedToSource"><</button>
+      <button @click="moveSelectedToStop">></button>
+      <button @click="moveSelectedToOperation"><</button>
     </div>
     <div class="picklist-container">
-      <h3>Selected Items</h3>
+      <h5>停止中</h5>
       <ul class="item-list">
         <li 
-          v-for="item in selectedItems" 
+          v-for="item in stopItems" 
           :key="item" 
-          @click="selectItem(item, 'selected')"
-          :class="{ 'selected-item': selected.selected === item }"
+          @click="selectItem(item, 'stop')"
+          :class="{ 'selected-item': selected.stop === item }"
         >
           {{ item }}
         </li>
-        <li v-if="selectedItems.length === 0" class="empty-placeholder">No Items</li>
+        <li v-if="stopItems.length === 0" class="empty-placeholder">No Items</li>
       </ul>
     </div>
   </div>

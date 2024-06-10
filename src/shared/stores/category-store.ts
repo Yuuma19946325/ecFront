@@ -26,6 +26,12 @@ export const useCategoryStore = defineStore('category-store', {
   getters: {
     getCategoryList(state): Category[] {
       return state.categoryList
+    },
+    getCategoryOperationList(state): Category[] {
+      return state.categoryList.filter((category) => category.deleteFlag === false)
+    },
+    getCategoryStopList(state): Category[] {
+      return state.categoryList.filter((category) => category.deleteFlag === true)
     }
   },
   actions: {
