@@ -3,7 +3,7 @@ import { SetupContext } from 'vue';
 import { commonDialog } from './CommonDialog';
 import { ref } from 'vue';
 import { useCategoryStore, type Category } from '../../shared/stores/category-store';
-
+import CategoryAddEditDialog from './CategoryAddEditDialog.vue'
 
 const categoryStore = useCategoryStore()
 
@@ -14,6 +14,10 @@ const props = defineProps({
 const emits = defineEmits(['update:dialogOpen']);
 
 const { localDialogOpen, closeDialog } = commonDialog(props, { emit: emits } as SetupContext);
+
+const categoryAddEditDialogOpen = ref<boolean>(false);
+const editCategoryId = ref<number|null>(null);
+
 
 // 初期データ
 const operationItems = ref<Category[]>(categoryStore.getCategoryOperationList);
@@ -47,6 +51,16 @@ const moveSelectedToOperation = () => {
     stopItems.value = stopItems.value.filter(item => item !== selected.value.stop);
     selected.value.stop = null;
   }
+}
+
+const addCategory = () => {
+    editCategoryId.value = null;
+    categoryAddEditDialogOpen.value = true;
+}
+
+const editCategory = () => {
+    editCategoryId.value = selected.value.operation?.categoryId || null;
+    categoryAddEditDialogOpen.value = true;
 }
 </script>
 
@@ -95,8 +109,14 @@ const moveSelectedToOperation = () => {
                         </div>
                     </div>
             </q-card-section>
+
+            <q-card-section class="row justify-end q-pt-none">
+                <q-btn color="primary" label="追加" @click="addCategory()" />
+                <q-btn color="secondary" label="編集" @click="editCategory()" />
+            </q-card-section>
         </q-card>
     </q-dialog>
+    <CategoryAddEditDialog :dialogOpen="categoryAddEditDialogOpen" :editCategoryId="editCategoryId" @update:dialogOpen="categoryAddEditDialogOpen = $event"></CategoryAddEditDialog>
 </template>
 
 <style scoped>
