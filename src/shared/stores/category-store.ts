@@ -3,7 +3,6 @@ import { CategoryService } from '../service/category.service'
 import { catchError, map } from 'rxjs'
 import {
   handleErrors,
-  subscribeWithCommonHandling,
   subscribeWithCommonHandlingIncrementCallback,
   useErrorResponseStore,
   type ErrorResponse
