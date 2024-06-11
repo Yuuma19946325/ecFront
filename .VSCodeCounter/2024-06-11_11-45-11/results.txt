@@ -1,0 +1,62 @@
+Date : 2024-06-11 11:45:11
+Directory : d:\study\EC\ecFront\src
+Total : 22 files,  971 codes, 66 comments, 143 blanks, all 1180 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| Vue        |          7 |        494 |         15 |         74 |        583 |
+| TypeScript |         11 |        371 |         49 |         49 |        469 |
+| CSS        |          2 |         98 |          2 |         18 |        118 |
+| JavaScript |          1 |          7 |          0 |          1 |          8 |
+| XML        |          1 |          1 |          0 |          1 |          2 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                          | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                             |         22 |        971 |         66 |        143 |      1,180 |
+| . (Files)                                                     |          2 |         46 |          4 |         15 |         65 |
+| assets                                                        |          3 |         99 |          2 |         19 |        120 |
+| pages                                                         |          7 |        486 |         11 |         74 |        571 |
+| pages\components                                              |          2 |        102 |          1 |         14 |        117 |
+| pages\dialog                                                  |          2 |        169 |          5 |         28 |        202 |
+| pages\views                                                   |          3 |        215 |          5 |         32 |        252 |
+| quasar                                                        |          1 |          7 |          0 |          1 |          8 |
+| router                                                        |          1 |         29 |          9 |          3 |         41 |
+| shared                                                        |          8 |        304 |         40 |         31 |        375 |
+| shared\api                                                    |          2 |         65 |         33 |          7 |        105 |
+| shared\service                                                |          2 |         28 |          5 |          7 |         40 |
+| shared\stores                                                 |          4 |        211 |          2 |         17 |        230 |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                      | language   | code       | comment    | blank      | total      |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| d:\study\EC\ecFront\src\App.vue                               | Vue        |         29 |          4 |          6 |         39 |
+| d:\study\EC\ecFront\src\assets\base.css                       | CSS        |         71 |          2 |         14 |         87 |
+| d:\study\EC\ecFront\src\assets\logo.svg                       | XML        |          1 |          0 |          1 |          2 |
+| d:\study\EC\ecFront\src\assets\main.css                       | CSS        |         27 |          0 |          4 |         31 |
+| d:\study\EC\ecFront\src\main.ts                               | TypeScript |         17 |          0 |          9 |         26 |
+| d:\study\EC\ecFront\src\pages\components\Footer.vue           | Vue        |         44 |          0 |          8 |         52 |
+| d:\study\EC\ecFront\src\pages\components\Header.vue           | Vue        |         58 |          1 |          6 |         65 |
+| d:\study\EC\ecFront\src\pages\dialog\CategoryDialog.vue       | Vue        |        148 |          5 |         22 |        175 |
+| d:\study\EC\ecFront\src\pages\dialog\CommonDialog.ts          | TypeScript |         21 |          0 |          6 |         27 |
+| d:\study\EC\ecFront\src\pages\views\AboutView.vue             | Vue        |        129 |          5 |         17 |        151 |
+| d:\study\EC\ecFront\src\pages\views\HomeView.vue              | Vue        |         47 |          0 |          8 |         55 |
+| d:\study\EC\ecFront\src\pages\views\ManagerMenu.vue           | Vue        |         39 |          0 |          7 |         46 |
+| d:\study\EC\ecFront\src\quasar\quasar-user-options.js         | JavaScript |          7 |          0 |          1 |          8 |
+| d:\study\EC\ecFront\src\router\index.ts                       | TypeScript |         29 |          9 |          3 |         41 |
+| d:\study\EC\ecFront\src\shared\api\api-common.ts              | TypeScript |         60 |         33 |          6 |         99 |
+| d:\study\EC\ecFront\src\shared\api\endpoints.ts               | TypeScript |          5 |          0 |          1 |          6 |
+| d:\study\EC\ecFront\src\shared\service\category.service.ts    | TypeScript |         19 |          4 |          5 |         28 |
+| d:\study\EC\ecFront\src\shared\service\goods.service.ts       | TypeScript |          9 |          1 |          2 |         12 |
+| d:\study\EC\ecFront\src\shared\stores\category-store.ts       | TypeScript |         70 |          1 |          4 |         75 |
+| d:\study\EC\ecFront\src\shared\stores\counter.ts              | TypeScript |         22 |          0 |          3 |         25 |
+| d:\study\EC\ecFront\src\shared\stores\error-response-store.ts | TypeScript |         62 |          0 |          6 |         68 |
+| d:\study\EC\ecFront\src\shared\stores\goods-store.ts          | TypeScript |         57 |          1 |          4 |         62 |
+| Total                                                         |            |        971 |         66 |        143 |      1,180 |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+

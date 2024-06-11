@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SetupContext } from 'vue';
+import { SetupContext, watch } from 'vue';
 import { commonDialog } from './CommonDialog';
 import { ref } from 'vue';
 import { useCategoryStore, type Category } from '../../shared/stores/category-store';
@@ -62,6 +62,12 @@ const editCategory = () => {
     editCategoryId.value = selected.value.operation?.categoryId || null;
     categoryAddEditDialogOpen.value = true;
 }
+
+watch(() => categoryStore.categoryList, (newValue:Category[]) => {
+    operationItems.value = newValue.filter((category) => category.deleteFlag === false);
+    stopItems.value = newValue.filter((category) => category.deleteFlag === true);
+});
+
 </script>
 
 <template>
@@ -112,7 +118,7 @@ const editCategory = () => {
 
             <q-card-section class="row justify-end q-pt-none">
                 <q-btn color="primary" label="追加" @click="addCategory()" />
-                <q-btn color="secondary" label="編集" @click="editCategory()" />
+                <q-btn color="secondary" label="編集" :disabled="!selected.operation?.categoryId" @click="editCategory()" />
             </q-card-section>
         </q-card>
     </q-dialog>
@@ -121,7 +127,7 @@ const editCategory = () => {
 
 <style scoped>
 .picklist {
-    height: 400px;
+    height: 350px;
     width: 500px;
     display: flex;
     justify-content: space-between;

@@ -7,10 +7,10 @@ import { commonDialog } from "./CommonDialog";
 
 const categoryStore = useCategoryStore();
 
-const props = defineProps({
-  dialogOpen: Boolean,
-  editCategoryId: number | null
-});
+const props = defineProps<{
+  dialogOpen: boolean;
+  editCategoryId: number | null;
+}>();
 
 const emits = defineEmits(['update:dialogOpen']);
 
@@ -34,7 +34,14 @@ watch(
   )
   
 const addEdit = () => {
-    console.log(textValue.value);
+    if(props.editCategoryId){
+        categoryStore.update(props.editCategoryId,{ categoryId:props.editCategoryId, categoryName:textValue.value})
+    }else{
+        categoryStore.add({ categoryName:textValue.value})
+    }
+
+    // categoryStore.increment();
+    closeDialog()
 }
 
 </script>
@@ -44,8 +51,8 @@ const addEdit = () => {
         <q-card>
             <q-card-section class="row items-center q-pb-none">
                 <div class="text-h6">
-                    <label v-if="editCategoryId">カテゴリ追加</label>
-                    <label v-else>カテゴリ編集</label>
+                    <label v-if="editCategoryId">カテゴリ編集</label>
+                    <label v-else>カテゴリ追加</label>
                 </div>
                 <q-space />
                 <q-btn icon="close" flat round dense @click="closeDialog" />

@@ -4,6 +4,7 @@ import { catchError, map } from 'rxjs'
 import {
   handleErrors,
   subscribeWithCommonHandling,
+  subscribeWithCommonHandlingIncrementCallback,
   useErrorResponseStore,
   type ErrorResponse
 } from './error-response-store'
@@ -65,15 +66,15 @@ export const useCategoryStore = defineStore('category-store', {
     },
     add(category: Category): void {
       const observable = categoryService.postCategory(category)
-      subscribeWithCommonHandling(handleErrors(observable))
+      subscribeWithCommonHandlingIncrementCallback(handleErrors(observable), this.increment)
     },
     update(categoryId: number, category: Category): void {
       const observable = categoryService.putCategory(categoryId, category)
-      subscribeWithCommonHandling(handleErrors(observable))
+      subscribeWithCommonHandlingIncrementCallback(handleErrors(observable), this.increment)
     },
     delete(categoryId: number): void {
       const observable = categoryService.deleteCategory(categoryId)
-      subscribeWithCommonHandling(handleErrors(observable))
+      subscribeWithCommonHandlingIncrementCallback(handleErrors(observable), this.increment)
     }
   }
 })
