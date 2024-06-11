@@ -39,8 +39,6 @@ const addEdit = () => {
     }else{
         categoryStore.add({ categoryName:textValue.value})
     }
-
-    // categoryStore.increment();
     closeDialog()
 }
 
