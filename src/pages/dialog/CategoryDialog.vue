@@ -67,7 +67,6 @@ watch(() => categoryStore.categoryList, (newValue:Category[]) => {
     operationItems.value = newValue.filter((category) => category.deleteFlag === false);
     stopItems.value = newValue.filter((category) => category.deleteFlag === true);
 });
-
 </script>
 
 <template>

@@ -27,7 +27,7 @@ export const useCategoryStore = defineStore('category-store', {
     getCategoryList(state): Category[] {
       return state.categoryList
     },
-    ggetCategory:
+    getCategory:
       (state) =>
       (categoryId: number): Category | undefined => {
         return state.categoryList.find((category) => category.categoryId === categoryId)

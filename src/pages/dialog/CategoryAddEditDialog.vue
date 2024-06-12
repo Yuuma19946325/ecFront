@@ -23,7 +23,7 @@ watch(
     () => props.editCategoryId,
     (newVal) => {
         if(newVal){
-            const category:Category | undefined = categoryStore.ggetCategory(newVal)
+            const category:Category | undefined = categoryStore.getCategory(newVal)
             textValue.value = category?.categoryName || ""
             buttonLabel.value = "編集"
         }else{
