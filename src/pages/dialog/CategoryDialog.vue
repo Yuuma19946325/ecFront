@@ -2,7 +2,7 @@
 import { SetupContext, watch } from 'vue';
 import { commonDialog } from './CommonDialog';
 import { ref } from 'vue';
-import { useCategoryStore, type Category } from '../../shared/stores/category-store';
+import { useCategoryStore, watchCategoryList, type Category } from '../../shared/stores/category-store';
 import CategoryAddEditDialog from './CategoryAddEditDialog.vue'
 
 const categoryStore = useCategoryStore()
@@ -30,25 +30,25 @@ const selected = ref({
 });
 
 // アイテム選択ハンドラ
-const selectItem = (item, type) => {
+const selectItem = (item:Category, type:string) => {
   selected.value[type] = item;
 }
 
 // アイテム移動ハンドラ
 const moveSelectedToStop = () => {
   if (selected.value.operation !== null) {
-    stopItems.value.push(selected.value.operation);
+    stopItems.value?.push(selected.value.operation);
     categoryStore.delete(selected.value.operation.categoryId)
-    operationItems.value = operationItems.value.filter(item => item !== selected.value.operation);
+    operationItems.value = operationItems.value?.filter(item => item !== selected.value.operation);
     selected.value.operation = null;
   }
 }
 
 const moveSelectedToOperation = () => {
   if (selected.value.stop !== null) {
-    operationItems.value.push(selected.value.stop);
+    operationItems.value?.push(selected.value.stop);
     categoryStore.update(selected.value.stop.categoryId, { categoryId:selected.value.stop.categoryId,categoryName:selected.value.stop.categoryName, deleteFlag:false})
-    stopItems.value = stopItems.value.filter(item => item !== selected.value.stop);
+    stopItems.value = stopItems.value?.filter(item => item !== selected.value.stop);
     selected.value.stop = null;
   }
 }
@@ -63,7 +63,7 @@ const editCategory = () => {
     categoryAddEditDialogOpen.value = true;
 }
 
-watch(() => categoryStore.categoryList, (newValue:Category[]) => {
+watchCategoryList((newValue: Category[], oldValue: Category[]) => {
     operationItems.value = newValue.filter((category) => category.deleteFlag === false);
     stopItems.value = newValue.filter((category) => category.deleteFlag === true);
 });
@@ -91,7 +91,7 @@ watch(() => categoryStore.categoryList, (newValue:Category[]) => {
                             >
                             {{ item.categoryName }}
                             </li>
-                            <li v-if="operationItems.length === 0" class="empty-placeholder">No Items</li>
+                            <li v-if="operationItems?.length === 0" class="empty-placeholder">No Items</li>
                         </ul>
                     </div>
                     <div class="picklist-actions">
@@ -109,7 +109,7 @@ watch(() => categoryStore.categoryList, (newValue:Category[]) => {
                             >
                             {{ item.categoryName }}
                             </li>
-                            <li v-if="stopItems.length === 0" class="empty-placeholder">No Items</li>
+                            <li v-if="stopItems?.length === 0" class="empty-placeholder">No Items</li>
                         </ul>
                         </div>
                     </div>
@@ -189,7 +189,7 @@ li:hover {
 .empty-placeholder {
     text-align: center;
     color: #aaa;
-    padding: 10px 0;
+    padding: 5px 0;
 }
 
 /* 選択中のアイテムに色を付ける */

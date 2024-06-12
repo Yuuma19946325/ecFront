@@ -7,13 +7,14 @@ import {
   useErrorResponseStore,
   type ErrorResponse
 } from './error-response-store'
+import { watch } from 'vue'
 
 // カテゴリーサービスをインスタンス化
 const categoryService = new CategoryService()
 
 export interface Category {
   categoryId?: number
-  categoryName: String
+  categoryName: string
   updateDate?: Date
   deleteDate?: Date | null
   deleteFlag?: boolean
@@ -77,3 +78,8 @@ export const useCategoryStore = defineStore('category-store', {
     }
   }
 })
+
+export function watchCategoryList(callback: (newValue: Category[], oldValue: Category[]) => void) {
+  const categoryStore = useCategoryStore()
+  watch(() => categoryStore.categoryList, callback)
+}

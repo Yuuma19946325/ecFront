@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
-import { ref, SetupContext, watch } from "vue";
-import { Category, useCategoryStore } from "../../shared/stores/category-store";
+import { ref, type SetupContext, watch } from "vue";
+import { type Category, useCategoryStore } from "../../shared/stores/category-store";
 
 import { commonDialog } from "./CommonDialog";
 
