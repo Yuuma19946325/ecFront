@@ -9,7 +9,7 @@ const categoryDialogOpen = ref<boolean>(false);
   <div class="admin-menu">
     <div class="title">管理者メニュー</div>
     <div class="buttons">
-      <q-btn color="primary" class="large-btn" label="商品管理" />
+      <q-btn color="primary" class="large-btn" label="商品管理" @click="$router.push({ path: '/goodsManager' })"/>
       <q-btn color="secondary" class="large-btn" label="カテゴリ管理" @click="categoryDialogOpen = true"/>
       <q-btn color="white" text-color="black" class="large-btn" label="注文管理" />
     </div>

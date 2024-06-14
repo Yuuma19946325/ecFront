@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { catchError, map } from 'rxjs/operators'
 import { GoodsService } from '@/shared/service/goods.service'
 import { useErrorResponseStore, type ErrorResponse } from './error-response-store'
+import { watch } from 'vue'
 
 // 商品サービスをインスタンス化
 const goodsService = new GoodsService()
@@ -59,3 +60,8 @@ export const useGoodsStore = defineStore('goods-store', {
     }
   }
 })
+
+export function watchGoodsList(callback: (newValue: Goods[], oldValue: Goods[]) => void) {
+  const goodsStore = useGoodsStore()
+  watch(() => goodsStore.getGoodsList, callback)
+}
