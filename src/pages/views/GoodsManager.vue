@@ -23,10 +23,6 @@ const pagination = ref({
   page: 1,
   rowsPerPage: 10
 });
-const image = (image:any):any => {
-    console.log(image)
-    return 'data:image/jpeg;base64,' + image
-}
 watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
     rows.value = newValue;
 });
@@ -57,7 +53,7 @@ watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
         <template v-slot:body-cell="props">
             <q-td :props="props">
                 <div v-if="'image' === props.col.field">
-                    <img :src="image(props.row.image)" alt="Converted Image">
+                    <img :src="'data:image/jpeg;base64,' + props.row.image" alt="Converted Image">
                 </div>
                 <div v-else-if="'categoryId' === props.col.field">
                     {{ categoryStore.getCategoryNameById(props.row.categoryId) }}
