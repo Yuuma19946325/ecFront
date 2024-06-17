@@ -3,29 +3,34 @@ import { computed, ref } from 'vue';
 import { QPage, QTable, QInput } from 'quasar';
 import { useGoodsStore, watchGoodsList, type Goods } from '@/shared/stores/goods-store';
 import { useCategoryStore } from '@/shared/stores/category-store';
+import CategorySelectBox from '@/pages/components/CategorySelectBox.vue';
 
 const goodsStore = useGoodsStore()
 const categoryStore = useCategoryStore()
 
+const goodsList = ref<Goods[]>(goodsStore.getGoodsList);
+
 const columns = [
-    { name: 'image', label: '画像', field: 'image', sortable: true },
+    { name: 'image', label: '画像', field: 'image' },
     { name: 'goodsName', label: '商品名', field: 'goodsName', sortable: true },
     { name: 'categoryId', label: 'カテゴリ名', field: 'categoryId', sortable: true },
     { name: 'amount', label: '金額', field: 'amount', sortable: true },
     { name: 'stock', label: '在庫', field: 'stock', sortable: true },
     { name: 'set', label: 'セット個数', field: 'set', sortable: true },
 ];
-
-const rows = ref<Goods[]>(goodsStore.getGoodsList);
-
-const filter = ref<string>('');
 const pagination = ref({
   page: 1,
   rowsPerPage: 10
 });
-watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
-    rows.value = newValue;
+
+const rows = computed(() => {
+    return goodsStore.getGoodsList;
 });
+
+watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
+    goodsList.value = newValue;
+});
+
 </script>
 
 <template>
@@ -34,10 +39,8 @@ watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
         class="fixed-header-table"
         :rows="rows"
         :columns="columns"
-        row-key="goodsName"
         :pagination.sync="pagination"
         :rows-per-page-options="[10, 20, 30]"
-        :filter="filter"
         rows-per-page-label="ページ毎のレコード"
         >
         <template v-slot:top="props">
@@ -45,10 +48,10 @@ watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
             round
             dense
             debounce="300"
-            v-model="filter"
             placeholder="Search"
             :clearable="true"
             />
+            <CategorySelectBox />
         </template>
         <template v-slot:body-cell="props">
             <q-td :props="props">
