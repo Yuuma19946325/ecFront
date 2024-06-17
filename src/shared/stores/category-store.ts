@@ -30,9 +30,11 @@ export const useCategoryStore = defineStore('category-store', {
     },
     getCategoryNameById:
       (state) =>
-      (categoryId: number): string | undefined => {
-        const category:Category | undefined = state.categoryList.find((category) => category.categoryId === categoryId)
-        return category?.categoryName;
+      (categoryId: number): string => {
+        const category: Category | undefined = state.categoryList.find(
+          (category) => category.categoryId === categoryId
+        )
+        return category?.categoryName ?? ''
       },
     getCategoryOperationList(state): Category[] {
       return state.categoryList.filter((category) => category.deleteFlag === false)

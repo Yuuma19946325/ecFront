@@ -1,23 +1,15 @@
 <script setup lang="ts">
-import { SetupContext, watch } from 'vue';
-import { commonDialog } from './CommonDialog';
 import { ref } from 'vue';
+import CategoryAddEditDialog from '../dialog/CategoryAddEditDialog.vue';
 import { useCategoryStore, watchCategoryList, type Category } from '../../shared/stores/category-store';
-import CategoryAddEditDialog from './CategoryAddEditDialog.vue'
 
-const categoryStore = useCategoryStore()
+// 子コンポーネントへの参照
+const categoryAddEditDialogRef = ref<InstanceType<typeof CategoryAddEditDialog> | null>(null);
+    
+const categoryStore = useCategoryStore();
 
-const props = defineProps({
-  dialogOpen: Boolean
-});
-
-const emits = defineEmits(['update:dialogOpen']);
-
-const { localDialogOpen, closeDialog } = commonDialog(props, { emit: emits } as SetupContext);
-
-const categoryAddEditDialogOpen = ref<boolean>(false);
-const editCategoryId = ref<number|null>(null);
-
+// ダイアログの開閉状態
+const dialogOpen = ref<boolean>(false);
 
 // 初期データ
 const operationItems = ref<Category[]>(categoryStore.getCategoryOperationList);
@@ -28,6 +20,11 @@ const selected = ref({
   operation: null as Category | null,
   stop: null as Category | null
 });
+
+// ダイアログを開くメソッド
+const open = (): void => {
+    dialogOpen.value = true;
+}
 
 // アイテム選択ハンドラ
 const selectItem = (item:Category, type:string) => {
@@ -54,28 +51,31 @@ const moveSelectedToOperation = () => {
 }
 
 const addCategory = () => {
-    editCategoryId.value = null;
-    categoryAddEditDialogOpen.value = true;
+    categoryAddEditDialogRef.value?.open();
 }
 
 const editCategory = () => {
-    editCategoryId.value = selected.value.operation?.categoryId || null;
-    categoryAddEditDialogOpen.value = true;
+    categoryAddEditDialogRef.value?.open(selected.value.operation?.categoryId);
 }
 
 watchCategoryList((newValue: Category[], oldValue: Category[]) => {
     operationItems.value = newValue.filter((category) => category.deleteFlag === false);
     stopItems.value = newValue.filter((category) => category.deleteFlag === true);
 });
+
+// コンポーネントのメソッドを公開
+defineExpose({
+    open
+});
 </script>
 
 <template>
-    <q-dialog v-model="localDialogOpen" persistent>
+    <q-dialog v-model="dialogOpen" persistent>
         <q-card>
             <q-card-section class="row items-center q-pb-none">
                 <div class="text-h6">カテゴリ管理</div>
                 <q-space />
-                <q-btn icon="close" flat round dense @click="closeDialog" />
+                <q-btn icon="close" flat round dense @click="dialogOpen = false" />
             </q-card-section>
 
             <q-card-section>
@@ -121,7 +121,7 @@ watchCategoryList((newValue: Category[], oldValue: Category[]) => {
             </q-card-section>
         </q-card>
     </q-dialog>
-    <CategoryAddEditDialog :dialogOpen="categoryAddEditDialogOpen" :editCategoryId="editCategoryId" @update:dialogOpen="categoryAddEditDialogOpen = $event"></CategoryAddEditDialog>
+    <CategoryAddEditDialog ref="categoryAddEditDialogRef"></CategoryAddEditDialog>
 </template>
 
 <style scoped>
