@@ -4,9 +4,11 @@ import { QPage, QTable, QInput } from 'quasar';
 import { useGoodsStore, watchGoodsList, type Goods } from '@/shared/stores/goods-store';
 import { useCategoryStore } from '@/shared/stores/category-store';
 import CategorySelectBox from '@/pages/components/CategorySelectBox.vue';
+import GoodsDetailDialog from '@/pages/dialog/GoodsDetailDialog.vue';
 import GoodsDeleteDialog from '@/pages/dialog/GoodsDeleteDialog.vue';
 
 // 子コンポーネントへの参照
+const goodsDetailDialogRef = ref<InstanceType<typeof GoodsDetailDialog> | null>(null);
 const goodsDeleteDialogRef = ref<InstanceType<typeof GoodsDeleteDialog> | null>(null);
 
 const goodsStore = useGoodsStore()
@@ -21,6 +23,7 @@ const columns = [
     { name: 'amount', label: '金額', field: 'amount', sortable: true },
     { name: 'stock', label: '在庫', field: 'stock', sortable: true },
     { name: 'set', label: 'セット個数', field: 'set', sortable: true },
+    { name: 'detail', label: '詳細', field: 'detail'},
     { name: 'delete', label: '削除', field: 'delete'},
 ];
 const pagination = ref({
@@ -55,6 +58,10 @@ const rows = computed(() : Goods[] => {
     return filterGoodsList;
 });
 
+const goodsDetail = (goodsId?: number) => {
+    goodsDetailDialogRef.value?.open(goodsId);
+}
+
 const goodsDelete = (goodsId?: number) => {
     goodsDeleteDialogRef.value?.open(goodsId);
 }
@@ -74,6 +81,7 @@ watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
         :pagination.sync="pagination"
         :rows-per-page-options="[10, 20, 30]"
         rows-per-page-label="ページ毎のレコード"
+        :separator="'cell'"
         >
         <template v-slot:top="props">
             <div class="input">
@@ -98,6 +106,15 @@ watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
                 <div v-else-if="'categoryId' === props.col.field">
                     {{ categoryStore.getCategoryNameById(props.row.categoryId) }}
                 </div>
+                <div v-else-if="'detail' === props.col.field">
+                    <q-btn
+                        flat
+                        round
+                        dense
+                        icon="style"
+                        @click="goodsDetail(props.row?.goodsId)"
+                    />
+                </div>
                 <div v-else-if="'delete' === props.col.field">
                     <q-btn
                         flat
@@ -114,14 +131,11 @@ watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
         </template>
         </q-table>
     </q-page>
+    <GoodsDetailDialog ref="goodsDetailDialogRef"></GoodsDetailDialog>
     <GoodsDeleteDialog ref="goodsDeleteDialogRef"></GoodsDeleteDialog>
 </template>
 
 <style scoped>
-.fixed-header-table {
-    height: 650px; /* テーブルの高さを調整 */
-    overflow-y: auto; /* 垂直方向のスクロールを有効にする */
-}
 .fixed-header-table thead th {
     position: sticky;
     top: 0;
