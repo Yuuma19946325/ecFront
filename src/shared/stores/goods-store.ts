@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import { catchError, map } from 'rxjs/operators'
 import { GoodsService } from '@/shared/service/goods.service'
-import { useErrorResponseStore, type ErrorResponse } from './error-response-store'
+import {
+  handleErrors,
+  subscribeWithCommonHandlingIncrementCallback,
+  useErrorResponseStore,
+  type ErrorResponse
+} from './error-response-store'
 import { watch } from 'vue'
 
 // 商品サービスをインスタンス化
@@ -32,7 +37,13 @@ export const useGoodsStore = defineStore('goods-store', {
   getters: {
     getGoodsList(state): Goods[] {
       return state.goodsList
-    }
+    },
+    getGoodsById:
+      (state) =>
+      (goodsId: number): Goods => {
+        const goods: Goods | undefined = state.goodsList.find((goods) => goods.goodsId === goodsId)
+        return goods ?? (new Object() as Goods)
+      }
   },
   actions: {
     increment(): void {
@@ -57,6 +68,10 @@ export const useGoodsStore = defineStore('goods-store', {
             useErrorResponseStore().setError(error)
           }
         })
+    },
+    delete(goodsId: number): void {
+      const observable = goodsService.deleteGoods(goodsId)
+      subscribeWithCommonHandlingIncrementCallback(handleErrors(observable), this.increment)
     }
   }
 })

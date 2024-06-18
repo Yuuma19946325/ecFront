@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { useCategoryStore, watchCategoryList, type Category } from '@/shared/stores/category-store';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
+const categoryStore = useCategoryStore();
 
-const categoryStore = useCategoryStore()
+const emit = defineEmits(['categoryId']);
 
-const model = ref<number | null>(null);
+const model = ref<Category | null>(null);
 const options = ref<Category[]>(categoryStore.getCategoryOperationList);
+
+watch(model, (newValue: Category | null) => {
+   emit('categoryId', newValue?.categoryId);
+});
 
 watchCategoryList((newValue: Category[], oldValue: Category[]) => {
     options.value = categoryStore.getCategoryOperationList;
@@ -15,12 +20,12 @@ watchCategoryList((newValue: Category[], oldValue: Category[]) => {
 
 <template>
     <div class="category-select-box">
-        <q-select v-model="model" :options="options" option-label="categoryName" option-value="categoryId" label="カテゴリ名"></q-select>
+        <q-select v-model="model" :options="options" option-label="categoryName" option-value="categoryId" label="カテゴリ名" clearable></q-select>
     </div>
 </template>
 
 <style scoped>
 .category-select-box{
-    width: 20rem;
+    width: 15rem;
 }
 </style>
