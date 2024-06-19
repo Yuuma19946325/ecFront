@@ -20,7 +20,7 @@ watchCategoryList((newValue: Category[], oldValue: Category[]) => {
 
 <template>
     <div class="category-select-box">
-        <q-select v-model="model" :options="options" option-label="categoryName" option-value="categoryId" label="カテゴリ名" clearable></q-select>
+        <q-select v-model="model" :options="options" option-label="categoryName" option-value="categoryId" label="カテゴリ" clearable></q-select>
     </div>
 </template>
 

@@ -5,10 +5,12 @@ import { useGoodsStore, watchGoodsList, type Goods } from '@/shared/stores/goods
 import { useCategoryStore } from '@/shared/stores/category-store';
 import CategorySelectBox from '@/pages/components/CategorySelectBox.vue';
 import GoodsDetailDialog from '@/pages/dialog/GoodsDetailDialog.vue';
+import GoodsAddDialog from '@/pages/dialog/GoodsAddDialog.vue';
 import GoodsDeleteDialog from '@/pages/dialog/GoodsDeleteDialog.vue';
 
 // 子コンポーネントへの参照
 const goodsDetailDialogRef = ref<InstanceType<typeof GoodsDetailDialog> | null>(null);
+const goodsAddDialogRef = ref<InstanceType<typeof GoodsAddDialog> | null>(null);
 const goodsDeleteDialogRef = ref<InstanceType<typeof GoodsDeleteDialog> | null>(null);
 
 const goodsStore = useGoodsStore()
@@ -96,6 +98,15 @@ watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
                 <div class="select-box">
                     <CategorySelectBox @categoryId="searchCategoryId = $event"/>
                 </div>
+                <div class="add">
+                    <q-btn
+                        flat
+                        round
+                        dense
+                        icon="add"
+                        @click="goodsAddDialogRef?.open()"
+                    />
+                </div>
             </div>
         </template>
         <template v-slot:body-cell="props">
@@ -132,6 +143,7 @@ watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
         </q-table>
     </q-page>
     <GoodsDetailDialog ref="goodsDetailDialogRef"></GoodsDetailDialog>
+    <GoodsAddDialog ref="goodsAddDialogRef"></GoodsAddDialog>
     <GoodsDeleteDialog ref="goodsDeleteDialogRef"></GoodsDeleteDialog>
 </template>
 
@@ -168,5 +180,9 @@ watchGoodsList((newValue: Goods[], oldValue: Goods[]) => {
 .selected-item {
     background-color: #d3e9ff;
     border-color: #80bfff;
+}
+
+.add{
+    margin-left: 4.5rem;
 }
 </style>

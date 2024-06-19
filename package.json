@@ -23,10 +23,12 @@
     "pinia": "^2.1.7",
     "quasar": "^2.16.4",
     "rxjs": "^7.8.1",
+    "vee-validate": "^4.13.1",
     "vue": "^3.4.21",
     "vue-meta": "^2.4.0",
     "vue-router": "^4.3.0",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^2.24.3",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@quasar/vite-plugin": "^1.7.0",
