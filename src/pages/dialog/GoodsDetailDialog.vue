@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import { useCategoryStore } from '@/shared/stores/category-store';
 import { useGoodsStore, type Goods } from '@/shared/stores/goods-store';
 import { ref } from 'vue';
 
 const goodsStore = useGoodsStore();
+const categoryStore = useCategoryStore();
 
 // ダイアログの開閉状態
 const dialogOpen = ref<boolean>(false);
 
-const goods = ref<Goods | null>(null);
+const goods = ref<Goods | any>(null);
 
 // ダイアログを開くメソッド
 const open = (goodsId?:number): void => {
@@ -17,13 +19,18 @@ const open = (goodsId?:number): void => {
 }
 
 const columns = ref([
-        { name: 'name', label: 'Name' },
-        { name: 'age', label: 'Age' },
-        { name: 'email', label: 'Email' },
-]);
-
-const rows = ref([
-    { id: 1, name: 'John Doe', age: 25, email: 'john@example.com' },
+    { name: 'image', label: '画像' },
+    { name: 'goodsName', label: '商品名' },
+    { name: 'categoryId', label: 'カテゴリ' },
+    { name: 'amount', label: '金額' },
+    { name: 'stock', label: '在庫' },
+    { name: 'set', label: 'セット個数' },
+    { name: 'material', label: '材質' },
+    { name: 'brand', label: 'ブランド' },
+    { name: 'theme', label: 'テーマ' },
+    { name: 'target', label: '金額' },
+    { name: 'stock', label: '対象年齢' },
+    { name: 'point', label: '付与ポイント' },
 ]);
 
 // コンポーネントのメソッドを公開
@@ -46,9 +53,22 @@ defineExpose({
                 <q-page>
                     <div class="vertical-table">
                     <div v-for="column in columns" :key="column.name" class="vertical-header">
-                        <div class="vertical-cell header-cell">{{ column.label }}</div>
-                        <div v-for="row in rows" :key="row.id" class="vertical-cell row-cell">
-                        {{ row[column.name] }}
+                        <div class="vertical-cell header-cell">
+                            {{ column.label }}
+                        </div>
+                        <div class="vertical-cell row-cell">
+                            <div v-if="'image' === column.name">
+                                <q-img
+                                    :src="'data:image/jpeg;base64,' + goods?.[column.name]"
+                                    alt="Converted Image" width="200px"
+                                    height="200px" />
+                            </div>
+                            <div v-else-if="'categoryId' === column.name">
+                                {{ categoryStore.getCategoryNameById(goods?.[column.name]) }}
+                            </div>
+                            <div v-else>
+                                {{ goods?.[column.name] }}
+                            </div>
                         </div>
                     </div>
                     </div>
