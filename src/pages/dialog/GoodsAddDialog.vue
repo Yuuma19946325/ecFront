@@ -51,8 +51,10 @@ const { value: target } = useField('target');
 const { value: point } = useField('point');
 
 // フォーム送信ハンドラー
-const onSubmit = handleSubmit((values:Goods) => {
-    goodsStore.add({ values })
+const onSubmit = handleSubmit((values) => {
+    goodsStore.add(values as Goods);
+
+    dialogOpen.value = false;
 });
 
 // コンポーネントのメソッドを公開
