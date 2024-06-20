@@ -2,7 +2,11 @@
 import { ref } from 'vue';
 import { useField, useForm } from 'vee-validate';
 import * as yup from 'yup';
+import ImageUploader from '@/pages/components/ImageUploader.vue';
 import CategorySelectBox from '@/pages/components/CategorySelectBox.vue';
+import { useGoodsStore, type Goods } from '@/shared/stores/goods-store';
+
+const goodsStore = useGoodsStore()
 
 // ダイアログの開閉状態
 const dialogOpen = ref<boolean>(false);
@@ -13,18 +17,18 @@ const open = (): void => {
 }
 
 // バリデーションスキーマの定義
-const schema  = yup.object({
+const schema  = yup.object<Goods>({
     image: yup.string().required('画像が設定されておりません'),
     goodsName: yup.string().required('商品名が入力されておりません'),
     categoryId: yup.string().required('カテゴリが選択されておりません'),
-    amount: yup.string().required('金額が入力されておりません').matches(/^[1-9]+$/, '金額は1以上で入力してください'),
-    stock: yup.string().required('在庫が入力されておりません').matches(/^[1-9]+$/, '在庫は1以上で入力してください'),
-    set: yup.string(),
+    amount: yup.number().required('金額が入力されておりません'),
+    stock: yup.number().required('在庫が入力されておりません'),
+    set: yup.number(),
     material: yup.string(),
     brand: yup.string(),
     theme: yup.string(),
-    target: yup.string(),
-    point: yup.string(),
+    target: yup.number(),
+    point: yup.number(),
 });
 
 
@@ -46,32 +50,9 @@ const { value: theme } = useField('theme');
 const { value: target } = useField('target');
 const { value: point } = useField('point');
 
-const file = ref<File | null>(null);
-const URL1 = ref<string | undefined>(undefined);
-const base64 = ref<string | null>(null);
-
-const onFileAdded = async (files: any) => {
-    file.value = files[0];
-    URL1.value = URL.createObjectURL(files[0]);
-    console.log(files[0]);
-    console.log(URL1.value);
-
-    const uint8Array = Array.from<number>(new Uint8Array(await files[0].arrayBuffer()))
-    let encodedStr = ''
-
-    for (let i = 0; i < uint8Array.length; i += 1024) {
-        encodedStr += String.fromCharCode.apply(
-            null, uint8Array.slice(i, i + 1024)
-        )
-    }
-
-    const base64 = window.btoa(encodedStr)
-    console.log(base64);
-};
-
 // フォーム送信ハンドラー
-const onSubmit = handleSubmit((values) => {
-    console.log('Form submitted', values);
+const onSubmit = handleSubmit((values:Goods) => {
+    goodsStore.add({ values })
 });
 
 // コンポーネントのメソッドを公開
@@ -95,16 +76,7 @@ defineExpose({
                     <div class="vertical-table">
                         <div class="vertical-header">
                             <div class="vertical-cell">
-                                <q-uploader
-                                    v-model="file"
-                                    label="Select an image"
-                                    accept="image/*"
-                                    @added="onFileAdded"
-                                />
-                                <div v-if="file">
-                                    <img :src="URL1" alt="Selected Image" style="max-width: 100%; height: auto;">
-                                </div>
-                                {{ base64 }}
+                                <ImageUploader @imageBase64="image = $event"/>
                                 <div class="error-message">{{ errors.image }}</div>
                             </div>
                         </div>

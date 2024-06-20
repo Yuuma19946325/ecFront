@@ -69,6 +69,10 @@ export const useGoodsStore = defineStore('goods-store', {
           }
         })
     },
+    add(goods: Goods): void {
+      const observable = goodsService.postCategory(goods)
+      subscribeWithCommonHandlingIncrementCallback(handleErrors(observable), this.increment)
+    },
     delete(goodsId: number): void {
       const observable = goodsService.deleteGoods(goodsId)
       subscribeWithCommonHandlingIncrementCallback(handleErrors(observable), this.increment)
