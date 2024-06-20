@@ -50,18 +50,23 @@ const file = ref<File | null>(null);
 const URL1 = ref<string | undefined>(undefined);
 const base64 = ref<string | null>(null);
 
-const onFileAdded = (files: any) => {
+const onFileAdded = async (files: any) => {
     file.value = files[0];
-    URL1.value = URL.createObjectURL(file.value);
+    URL1.value = URL.createObjectURL(files[0]);
+    console.log(files[0]);
+    console.log(URL1.value);
 
-    const convertToBase64 = () => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.value!);
-        reader.onload = () => {
-            base64.value = reader.result as string;
-            console.log('base64', base64);
-        };
-    };
+    const uint8Array = Array.from<number>(new Uint8Array(await files[0].arrayBuffer()))
+    let encodedStr = ''
+
+    for (let i = 0; i < uint8Array.length; i += 1024) {
+        encodedStr += String.fromCharCode.apply(
+            null, uint8Array.slice(i, i + 1024)
+        )
+    }
+
+    const base64 = window.btoa(encodedStr)
+    console.log(base64);
 };
 
 // フォーム送信ハンドラー
