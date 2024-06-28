@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useGoodsStore, type Goods } from '@/shared/stores/goods-store';
+import { Goods, useGoodsStore } from '@/shared/stores/goods-store';
 import { ref } from 'vue';
 
 const goodsStore = useGoodsStore();
@@ -7,10 +7,10 @@ const goodsStore = useGoodsStore();
 // ダイアログの開閉状態
 const dialogOpen = ref<boolean>(false);
 
-const goods = ref<Goods | null>(null);
+const goods = ref<Goods>(new Object() as Goods);
 
 // ダイアログを開くメソッド
-const open = (goodsId?:number): void => {
+const open = (goodsId:number): void => {
     dialogOpen.value = true;
 
     goods.value = goodsStore.getGoodsById(goodsId);

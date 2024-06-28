@@ -12,7 +12,7 @@ const dialogOpen = ref<boolean>(false);
 const goods = ref<Goods | any>(null);
 
 // ダイアログを開くメソッド
-const open = (goodsId?:number): void => {
+const open = (goodsId:number): void => {
     dialogOpen.value = true;
 
     goods.value = goodsStore.getGoodsById(goodsId);
